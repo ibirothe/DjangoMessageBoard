@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Message Board{% endblock %}
+
+{% block content %}
+  <h2>Messages</h2>
+
+  <a href="{% url 'add_message' %}">➕ Add a new message</a>
+
+  <ul>
+    {% for message in messages %}
+      <li>
+        <strong>{{ message.author|default:"Anonymous" }}</strong>:
+        {{ message.text }}
+        <br>
+        <small>{{ message.created_at|date:"Y-m-d H:i" }}</small>
+        <br>
+        <a href="{% url 'edit_message' message.pk %}">✏️ Edit</a> |
+        <a href="{% url 'delete_message' message.pk %}">🗑️ Delete</a>
+      </li>
+    {% empty %}
+      <li>No messages yet! Be the first to post one.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
