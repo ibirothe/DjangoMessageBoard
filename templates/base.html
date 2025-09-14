@@ -3,8 +3,23 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>{% block title %}Django Practice{% endblock %}</title>
+  <title>{% block title %}Django Message Board{% endblock %}</title>
   <link rel="stylesheet" href="{% static 'style.css' %}">
+  <style>
+    /* Inline styles for the nav */
+    nav {
+      background: #333;
+      padding: 0.5em 1em;
+    }
+    nav a, nav button {
+      color: #fff;
+      margin-right: 1em;
+      text-decoration: none;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
 
@@ -33,7 +48,6 @@
       {% endif %}
     </nav>
 
-    <h1 class="site-title">{% block header %}Django Practice{% endblock %}</h1>
   </header>
 
   <main>
