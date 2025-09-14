@@ -82,3 +82,37 @@ li:last-child {
 strong {
     color: #2c3e50;
 }
+
+/* Flash messages */
+.flash-container {
+  max-width: 100%;
+  margin: 8px 12px;
+  padding: 0 12px;
+}
+.flash {
+  padding: 10px 14px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+/* message types (django uses these tags) */
+.flash.success { background-color: #b0b591; color: #2c3e50; }
+.flash.info    { background-color: #b0b591; color: #2c3e50; }
+.flash.warning { background-color: #b0b591; color: #2c3e50; }
+.flash.error   { background-color: #b0b591; color: #721c24; }
+
+/* tiny layout tweaks for the card and messages */
+.container { display:flex; justify-content:center; padding: 30px 10px; }
+.card {
+  width: 560px;
+  background: white;
+  padding: 18px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+}
+.message-item { margin-bottom: 10px; }
+.meta { font-size: 0.9rem; color: #333; margin-bottom:4px; }
+.text { margin: 6px 0; }
+.controls { font-size: 0.9rem; color: #444; }
+.controls a { margin-left: 8px; text-decoration: none; color: #2a6cff; }
+.pagination { margin-top: 10px; }

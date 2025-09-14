@@ -5,6 +5,16 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
+
+class MessageListView(ListView):
+    model = Message
+    template_name = "index.html"
+    context_object_name = "messages_list"   # <-- avoid conflict with Django's messages
+    ordering = ["-created_at"]
+    paginate_by = 10  # optional: paginates your list, remove if you don't want pagination
+
 
 class MessageCreateView(LoginRequiredMixin, CreateView):
     model = Message
@@ -13,28 +23,11 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("index")
 
     def form_valid(self, form):
-        if self.request.user.is_authenticated:
-            form.instance.author = self.request.user.username
-        else:
-            form.instance.author = "Anonymous"
+        form.instance.author = self.request.user.username
+        messages.success(self.request, "Message created successfully!")
         return super().form_valid(form)
 
-class UserLoginView(LoginView):
-    template_name = "login.html"
 
-    def get_success_url(self):
-        return reverse_lazy("index")
-
-class UserLogoutView(LogoutView):
-    def get_next_page(self):
-        return reverse_lazy("index")
-
-class MessageListView(ListView):
-    model = Message
-    template_name = "index.html"
-    context_object_name = "messages"
-    ordering = ["-created_at"]
-    
 class MessageUpdateView(LoginRequiredMixin, UpdateView):
     model = Message
     fields = ["text"]
@@ -42,9 +35,12 @@ class MessageUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("index")
 
     def form_valid(self, form):
+        # Prevent editing others' messages
         if form.instance.author != self.request.user.username:
             return self.handle_no_permission()
+        messages.success(self.request, "Message updated successfully!")
         return super().form_valid(form)
+
 
 class MessageDeleteView(LoginRequiredMixin, DeleteView):
     model = Message
@@ -55,13 +51,32 @@ class MessageDeleteView(LoginRequiredMixin, DeleteView):
         obj = self.get_object()
         if obj.author != request.user.username and not request.user.is_superuser:
             return self.handle_no_permission()
+        messages.success(self.request, "Message deleted successfully!")
         return super().dispatch(request, *args, **kwargs)
+
+
+class UserLoginView(LoginView):
+    template_name = "login.html"
+
+    def get_success_url(self):
+        # respect ?next= if present, else go home
+        messages.success(self.request, f"Welcome back, {self.request.user.username}!")
+        return self.get_redirect_url() or reverse_lazy("index")
+
+
+class UserLogoutView(LogoutView):
+    def get_next_page(self):
+        messages.info(self.request, "You have been logged out.")
+        return reverse_lazy("index")
+
 
 @login_required
 def toggle_like(request, pk):
     message = get_object_or_404(Message, pk=pk)
     if request.user in message.likes.all():
         message.likes.remove(request.user)
+        messages.info(request, "You unliked a message.")
     else:
         message.likes.add(request.user)
+        messages.success(request, "You liked a message.")
     return redirect("index")
