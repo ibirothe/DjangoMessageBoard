@@ -3,6 +3,7 @@ from .views import (
     MessageListView, MessageCreateView, MessageUpdateView, MessageDeleteView,
     UserLoginView, UserLogoutView
 )
+from .views import toggle_like
 
 urlpatterns = [
     path("", MessageListView.as_view(), name="index"),
@@ -11,4 +12,5 @@ urlpatterns = [
     path("delete/<int:pk>/", MessageDeleteView.as_view(), name="delete_message"),
     path("login/", UserLoginView.as_view(), name="login"),
     path("logout/", UserLogoutView.as_view(), name="logout"),
+    path("like/<int:pk>/", toggle_like, name="like_message"),
 ]

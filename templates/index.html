@@ -3,23 +3,30 @@
 {% block title %}Message Board{% endblock %}
 
 {% block content %}
-  <h2>Messages</h2>
+<h2>Messages</h2>
 
   <a href="{% url 'add_message' %}">➕ Add a new message</a>
 
-  <ul>
-    {% for message in messages %}
-      <li>
-        <strong>{{ message.author|default:"Anonymous" }}</strong>:
-        {{ message.text }}
-        <br>
-        <small>{{ message.created_at|date:"Y-m-d H:i" }}</small>
-        <br>
+{% for message in messages %}
+  <div class="message">
+    <p><strong>{{ message.author }}</strong> - {{ message.created_at|date:"M d, Y H:i" }}</p>
+    <p>{{ message.text }}</p>
+    Likes: {{ message.total_likes }}
+    {% if user.is_authenticated %}
+      <a href="{% url 'like_message' message.pk %}">
+        {% if user in message.likes.all %}💔 Unlike{% else %}❤️ Like{% endif %}
+      </a>
+    {% endif %}
+    {% if user.is_authenticated and user.username == message.author %}
+      <p>
         <a href="{% url 'edit_message' message.pk %}">✏️ Edit</a> |
         <a href="{% url 'delete_message' message.pk %}">🗑️ Delete</a>
-      </li>
-    {% empty %}
-      <li>No messages yet! Be the first to post one.</li>
-    {% endfor %}
-  </ul>
+      </p>
+    {% endif %}
+  </div>
+  <hr>
+{% empty %}
+  <p>No messages yet.</p>
+{% endfor %}
+
 {% endblock %}

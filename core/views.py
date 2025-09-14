@@ -3,6 +3,8 @@ from django.urls import reverse_lazy
 from .models import Message
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 class MessageCreateView(LoginRequiredMixin, CreateView):
     model = Message
@@ -54,3 +56,12 @@ class MessageDeleteView(LoginRequiredMixin, DeleteView):
         if obj.author != request.user.username and not request.user.is_superuser:
             return self.handle_no_permission()
         return super().dispatch(request, *args, **kwargs)
+
+@login_required
+def toggle_like(request, pk):
+    message = get_object_or_404(Message, pk=pk)
+    if request.user in message.likes.all():
+        message.likes.remove(request.user)
+    else:
+        message.likes.add(request.user)
+    return redirect("index")
