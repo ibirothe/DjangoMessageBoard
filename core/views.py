@@ -6,7 +6,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
+from rest_framework import generics, permissions
+from .serializers import MessageSerializer
+from rest_framework import generics, permissions, status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
+from .serializers import MessageSerializer
+from .models import Message
 
 class MessageListView(ListView):
     model = Message
@@ -80,3 +87,41 @@ def toggle_like(request, pk):
         message.likes.add(request.user)
         messages.success(request, "You liked a message.")
     return redirect("index")
+
+class MessageListAPI(generics.ListCreateAPIView):
+    queryset = Message.objects.all().order_by("-created_at")
+    serializer_class = MessageSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user.username)
+
+
+class MessageDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+class MessageLikeAPI(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, pk):
+        message = get_object_or_404(Message, pk=pk)
+        user = request.user
+        liked = False
+
+        if user in message.likes.all():
+            message.likes.remove(user)
+            liked = False
+        else:
+            message.likes.add(user)
+            liked = True
+
+        return Response(
+            {
+                "id": message.id,
+                "likes_count": message.likes.count(),
+                "liked": liked,
+            },
+            status=status.HTTP_200_OK,
+        )
