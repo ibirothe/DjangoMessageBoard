@@ -20,7 +20,7 @@ class MessageListView(ListView):
     template_name = "index.html"
     context_object_name = "messages_list"
     ordering = ["-created_at"]
-    paginate_by = 10
+    paginate_by = 8
 
 
 class MessageCreateView(LoginRequiredMixin, CreateView):

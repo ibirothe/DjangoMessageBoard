@@ -2,20 +2,20 @@
 
 /* Basic page styling */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    color: #333;
+    font-family: Helvetica, sans-serif;
+    background-color: rgb(45, 45, 59);
+    color: #c3bdbd;
     margin: 0;
     padding: 0;
 }
 
 /* Header */
 header {
-    background-color: #b0b591;
-    color: white;
+    background-color: rgb(153, 153, 213);
+    color: #c3bdbd;
     padding: 1rem;
     text-align: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.172);
 }
 
 /* Main content */
@@ -23,14 +23,14 @@ main {
     max-width: 600px;
     margin: 2rem auto;
     padding: 1rem;
-    background-color: white;
+    background-color: rgb(45, 45, 59);
     border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.172);
 }
 
 /* Links */
 a {
-    color: #4a90e2;
+    color: #716dad;
     text-decoration: none;
 }
 
@@ -53,15 +53,15 @@ form input[type="text"] {
 
 form button {
     padding: 0.5rem 1rem;
-    background-color: #2c3e50;
-    color: white;
+    background-color: rgb(26, 24, 29);
+    color: #c3bdbd;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
 form button:hover {
-    background-color: #357ab8;
+    background-color: rgb(38, 35, 44);
 }
 
 /* Message list */
@@ -96,10 +96,10 @@ strong {
   font-size: 0.95rem;
 }
 /* message types (django uses these tags) */
-.flash.success { background-color: #b0b591; color: #2c3e50; }
-.flash.info    { background-color: #b0b591; color: #2c3e50; }
-.flash.warning { background-color: #b0b591; color: #2c3e50; }
-.flash.error   { background-color: #b0b591; color: #721c24; }
+.flash.success { background-color:rgb(174, 174, 223); color: #2c3e50; }
+.flash.info    { background-color:rgb(174, 174, 223); color: #2c3e50; }
+.flash.warning { background-color:rgb(174, 174, 223); color: #2c3e50; }
+.flash.error   { background-color:rgb(174, 174, 223); color: #721c24; }
 
 /* tiny layout tweaks for the card and messages */
 .container { display:flex; justify-content:center; padding: 30px 10px; }
