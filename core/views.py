@@ -18,9 +18,9 @@ from .models import Message
 class MessageListView(ListView):
     model = Message
     template_name = "index.html"
-    context_object_name = "messages_list"   # <-- avoid conflict with Django's messages
+    context_object_name = "messages_list"
     ordering = ["-created_at"]
-    paginate_by = 10  # optional: paginates your list, remove if you don't want pagination
+    paginate_by = 10
 
 
 class MessageCreateView(LoginRequiredMixin, CreateView):
