@@ -18,6 +18,7 @@ This project is designed as a practice project to learn Django basics:
 - Template rendering and static files
 - Basic CRUD functionality
 - Many-to-many relationships (likes)
+- REST API
 
 Notes:
 
